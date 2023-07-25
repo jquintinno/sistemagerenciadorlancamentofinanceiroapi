@@ -5,6 +5,8 @@ import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.repository.Pes
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PessoaService {
 
@@ -13,6 +15,14 @@ public class PessoaService {
 
     public PessoaDomain create(PessoaDomain pessoaDomain) {
         return this.pessoaRepository.save(pessoaDomain);
+    }
+
+    public List<PessoaDomain> searchAll() {
+        return this.pessoaRepository.findAll();
+    }
+
+    public PessoaDomain searchOne(Long codigoPessoa) {
+        return this.pessoaRepository.findById(codigoPessoa).orElseThrow();
     }
 
 }

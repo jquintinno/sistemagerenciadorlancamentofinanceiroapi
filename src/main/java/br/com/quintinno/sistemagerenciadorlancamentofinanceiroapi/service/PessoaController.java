@@ -1,8 +1,11 @@
 package br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.service;
 
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.domain.PessoaDomain;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/pessoa")
@@ -15,6 +18,16 @@ public class PessoaController {
     @PostMapping
     public PessoaDomain create(@RequestBody PessoaDomain pessoaDomain) {
         return this.pessoaService.create(pessoaDomain);
+    }
+
+    @GetMapping
+    public List<PessoaDomain> searchAll() {
+        return this.pessoaService.searchAll();
+    }
+
+    @GetMapping("/{codigoPessoa}")
+    public PessoaDomain searchOne(@PathVariable("codigoPessoa") Long codigoPessoa) {
+        return this.pessoaService.searchOne(codigoPessoa);
     }
 
 }
