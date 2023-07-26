@@ -1,20 +1,14 @@
-package br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.enumeration;
+package br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto;
 
-public enum TipoPessoaEnumeration {
-    PESSOA_FISICA(1, "Pessoa Física", "PF"),
-    PESSOA_JURIDICA(2, "Pessoa Jurídica", "PJ");
-
-    TipoPessoaEnumeration(Integer codigo, String descricao, String sigla) {
-        this.codigo = codigo;
-        this.descricao = descricao;
-        this.sigla = sigla;
-    }
+public class TipoPessoaResponseDTO {
 
     private Integer codigo;
 
     private String descricao;
 
     private String sigla;
+
+    public TipoPessoaResponseDTO() { }
 
     public Integer getCodigo() {
         return codigo;

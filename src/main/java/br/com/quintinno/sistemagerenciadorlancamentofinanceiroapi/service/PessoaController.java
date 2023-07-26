@@ -1,7 +1,7 @@
 package br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.service;
 
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.domain.PessoaDomain;
-import jakarta.websocket.server.PathParam;
+import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto.TipoPessoaResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +28,11 @@ public class PessoaController {
     @GetMapping("/{codigoPessoa}")
     public PessoaDomain searchOne(@PathVariable("codigoPessoa") Long codigoPessoa) {
         return this.pessoaService.searchOne(codigoPessoa);
+    }
+
+    @GetMapping("/tipo-pessoa")
+    public List<TipoPessoaResponseDTO> searchTipoPessoaAll() {
+        return this.pessoaService.searchTipoPessoaAll();
     }
 
 }
