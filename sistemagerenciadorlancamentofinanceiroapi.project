@@ -1,5 +1,9 @@
 ### Sistema Gerenciador de Lancamento Financeiro (API)
 
+    -- Comandos
+
+        mvn spring-boot:run
+
     -- Tarefas
 
         SISGERLANFIN24072023221219
