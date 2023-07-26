@@ -1,8 +1,16 @@
 package br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.enumeration;
 
+import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto.TipoPessoaResponseDTO;
+
 public enum TipoPessoaEnumeration {
     PESSOA_FISICA(1, "Pessoa Física", "PF"),
     PESSOA_JURIDICA(2, "Pessoa Jurídica", "PJ");
+
+    private Integer codigo;
+
+    private String descricao;
+
+    private String sigla;
 
     TipoPessoaEnumeration(Integer codigo, String descricao, String sigla) {
         this.codigo = codigo;
@@ -10,11 +18,12 @@ public enum TipoPessoaEnumeration {
         this.sigla = sigla;
     }
 
-    private Integer codigo;
-
-    private String descricao;
-
-    private String sigla;
+    public static TipoPessoaEnumeration converter(TipoPessoaResponseDTO tipoPessoaResponseDTO) {
+        if (tipoPessoaResponseDTO.getCodigo() == 1) {
+            return TipoPessoaEnumeration.PESSOA_FISICA;
+        }
+        return TipoPessoaEnumeration.PESSOA_JURIDICA;
+    }
 
     public Integer getCodigo() {
         return codigo;

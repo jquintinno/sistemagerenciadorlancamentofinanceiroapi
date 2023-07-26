@@ -1,7 +1,11 @@
-package br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.service;
+package br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.controller;
 
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.domain.PessoaDomain;
+import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto.PessoaRequestDTO;
+import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto.PessoaResponseDTO;
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto.TipoPessoaResponseDTO;
+import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.enumeration.TipoPessoaEnumeration;
+import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,17 +20,17 @@ public class PessoaController {
     private PessoaService pessoaService;
 
     @PostMapping
-    public PessoaDomain create(@RequestBody PessoaDomain pessoaDomain) {
-        return this.pessoaService.create(pessoaDomain);
+    public PessoaResponseDTO create(@RequestBody PessoaRequestDTO pessoaRequestDTO) {
+        return this.pessoaService.create(pessoaRequestDTO);
     }
 
     @GetMapping
-    public List<PessoaDomain> searchAll() {
+    public List<PessoaResponseDTO> searchAll() {
         return this.pessoaService.searchAll();
     }
 
     @GetMapping("/{codigoPessoa}")
-    public PessoaDomain searchOne(@PathVariable("codigoPessoa") Long codigoPessoa) {
+    public PessoaResponseDTO searchOne(@PathVariable("codigoPessoa") Long codigoPessoa) {
         return this.pessoaService.searchOne(codigoPessoa);
     }
 
