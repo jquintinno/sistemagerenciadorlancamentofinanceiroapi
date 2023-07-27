@@ -1,6 +1,5 @@
 package br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PessoaResponseDTO {

@@ -55,6 +55,19 @@ public class PessoaService {
         return pessoaResponseDTO;
     }
 
+    public PessoaResponseDTO updateOne(PessoaRequestDTO pessoaRequestDTO) {
+        PessoaDomain pessoaDomain = new PessoaDomain();
+            pessoaDomain.setCodigo(pessoaRequestDTO.getCodigo());
+            pessoaDomain.setTipoPessoaEnumeration(TipoPessoaEnumeration.converter(pessoaRequestDTO.getTipoPessoaResponseDTO()));
+            pessoaDomain.setNome(pessoaRequestDTO.getNome());
+            pessoaDomain = this.pessoaRepository.save(pessoaDomain);
+        PessoaResponseDTO pessoaResponseDTO = new PessoaResponseDTO();
+            pessoaResponseDTO.setCodigo(pessoaDomain.getCodigo());
+            pessoaResponseDTO.setTipoPessoaResponseDTO(pessoaRequestDTO.getTipoPessoaResponseDTO());
+            pessoaDomain.setNome(pessoaDomain.getNome());
+        return pessoaResponseDTO;
+    }
+
     public List<TipoPessoaResponseDTO> searchTipoPessoaAll() {
         List<TipoPessoaResponseDTO> tipoPessoaResponseDTOList = new ArrayList<>();
         for (TipoPessoaEnumeration tipoPessoaEnumeration : TipoPessoaEnumeration.values()) {
