@@ -35,7 +35,7 @@ public class PessoaService {
         List<PessoaResponseDTO> pessoaResponseDTOList = new ArrayList<>();
         this.pessoaRepository.findAll().forEach( pessoaDomain -> {
             pessoaResponseDTOList.add(new PessoaResponseDTO(pessoaDomain.getCodigo(),
-                    pessoaDomain.getTipoPessoaEnumeration().getDescricao(),
+                    TipoPessoaResponseDTO.converterEnumerationToDTO(pessoaDomain.getTipoPessoaEnumeration().getCodigo()),
                     pessoaDomain.getNome()));
         });
         return pessoaResponseDTOList;
@@ -50,7 +50,7 @@ public class PessoaService {
             pessoaResponseDTO.setNome(pessoaDomain.getNome());
             this.searchTipoPessoaAll().forEach( tipoPessoaResponseDTO -> {
                 if (tipoPessoaResponseDTO.getCodigo() == pessoaDomain.getTipoPessoaEnumeration().getCodigo()) {
-                    pessoaResponseDTO.setTipoPessoa(tipoPessoaResponseDTO.getDescricao());
+                    pessoaResponseDTO.setTipoPessoaResponseDTO(tipoPessoaResponseDTO);
                 }
             });
         return pessoaResponseDTO;
@@ -64,7 +64,7 @@ public class PessoaService {
             pessoaDomain = this.pessoaRepository.save(pessoaDomain);
         PessoaResponseDTO pessoaResponseDTO = new PessoaResponseDTO();
             pessoaResponseDTO.setCodigo(pessoaDomain.getCodigo());
-            pessoaResponseDTO.setTipoPessoa(pessoaRequestDTO.getTipoPessoaResponseDTO().getDescricao());
+            pessoaResponseDTO.setTipoPessoaResponseDTO(pessoaRequestDTO.getTipoPessoaResponseDTO());
             pessoaDomain.setNome(pessoaDomain.getNome());
         return pessoaResponseDTO;
     }
@@ -89,7 +89,7 @@ public class PessoaService {
 
     private PessoaResponseDTO convertPessoaResponseDTO(PessoaDomain pessoaDomain) {
         PessoaResponseDTO pessoaResponseDTO = this.modelMapperConfiguration.modelMapper().map(pessoaDomain, PessoaResponseDTO.class);
-            pessoaResponseDTO.setTipoPessoa(pessoaDomain.getTipoPessoaEnumeration().getDescricao());
+            pessoaResponseDTO.setTipoPessoaResponseDTO(TipoPessoaResponseDTO.converterEnumerationToDTO(pessoaDomain.getTipoPessoaEnumeration().getCodigo()));
         return pessoaResponseDTO;
     }
 

@@ -7,15 +7,15 @@ public class PessoaResponseDTO {
     private Long codigo;
 
     @JsonProperty("tipoPessoa")
-    private String tipoPessoa;
+    private TipoPessoaResponseDTO tipoPessoaResponseDTO;
 
     private String nome;
 
     public PessoaResponseDTO() { }
 
-    public PessoaResponseDTO(Long codigo, String tipoPessoa, String nome) {
+    public PessoaResponseDTO(Long codigo, TipoPessoaResponseDTO tipoPessoaResponseDTO, String nome) {
         this.codigo = codigo;
-        this.tipoPessoa = tipoPessoa;
+        this.tipoPessoaResponseDTO = tipoPessoaResponseDTO;
         this.nome = nome;
     }
 
@@ -27,12 +27,12 @@ public class PessoaResponseDTO {
         this.codigo = codigo;
     }
 
-    public String getTipoPessoa() {
-        return tipoPessoa;
+    public TipoPessoaResponseDTO getTipoPessoaResponseDTO() {
+        return tipoPessoaResponseDTO;
     }
 
-    public void setTipoPessoa(String tipoPessoa) {
-        this.tipoPessoa = tipoPessoa;
+    public void setTipoPessoaResponseDTO(TipoPessoaResponseDTO tipoPessoaResponseDTO) {
+        this.tipoPessoaResponseDTO = tipoPessoaResponseDTO;
     }
 
     public String getNome() {
