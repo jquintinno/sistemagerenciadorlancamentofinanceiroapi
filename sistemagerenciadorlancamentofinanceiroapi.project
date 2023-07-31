@@ -15,3 +15,5 @@
         SISGERLANFIN31072023131140
 
             Feature: Modelagem de Classes de Domínio (Gerenciador de Lançamento Financeiro)
+
+            Feature: Configurar ModelMapper para mapeamento de DTO

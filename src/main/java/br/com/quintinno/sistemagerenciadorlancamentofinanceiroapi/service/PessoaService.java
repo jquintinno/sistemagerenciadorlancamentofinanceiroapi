@@ -1,5 +1,6 @@
 package br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.service;
 
+import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.configuration.ModelMapperConfiguration;
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.domain.PessoaDomain;
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto.PessoaRequestDTO;
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto.PessoaResponseDTO;
@@ -18,16 +19,16 @@ public class PessoaService {
     @Autowired
     private PessoaRepository pessoaRepository;
 
+    private final ModelMapperConfiguration modelMapperConfiguration;
+
+    public PessoaService() {
+        modelMapperConfiguration = new ModelMapperConfiguration();
+    }
+
     public PessoaResponseDTO createOne(PessoaRequestDTO pessoaRequestDTO) {
-        PessoaDomain pessoaDomain = new PessoaDomain();
-            pessoaDomain.setNome(pessoaRequestDTO.getNome());
-            pessoaDomain.setTipoPessoaEnumeration(TipoPessoaEnumeration.converter(pessoaRequestDTO.getTipoPessoaResponseDTO()));
+        PessoaDomain pessoaDomain = this.convertPessoaDomain(pessoaRequestDTO);
             pessoaDomain = this.pessoaRepository.save(pessoaDomain);
-        PessoaResponseDTO pessoaResponseDTO = new PessoaResponseDTO();
-            pessoaResponseDTO.setCodigo(pessoaDomain.getCodigo());
-            pessoaResponseDTO.setNome(pessoaDomain.getNome());
-            pessoaResponseDTO.setTipoPessoa(pessoaRequestDTO.getTipoPessoaResponseDTO().getDescricao());
-        return pessoaResponseDTO;
+        return this.convertPessoaResponseDTO(pessoaDomain);
     }
 
     public List<PessoaResponseDTO> searchAll() {
@@ -78,6 +79,18 @@ public class PessoaService {
                 tipoPessoaResponseDTOList.add(tipoPessoaResponseDTO);
         }
         return tipoPessoaResponseDTOList;
+    }
+
+    private PessoaDomain convertPessoaDomain(PessoaRequestDTO pessoaRequestDTO) {
+        PessoaDomain pessoaDomain = modelMapperConfiguration.modelMapper().map(pessoaRequestDTO, PessoaDomain.class);
+            pessoaDomain.setTipoPessoaEnumeration(TipoPessoaEnumeration.converter(pessoaRequestDTO.getTipoPessoaResponseDTO()));
+        return pessoaDomain;
+    }
+
+    private PessoaResponseDTO convertPessoaResponseDTO(PessoaDomain pessoaDomain) {
+        PessoaResponseDTO pessoaResponseDTO = this.modelMapperConfiguration.modelMapper().map(pessoaDomain, PessoaResponseDTO.class);
+            pessoaResponseDTO.setTipoPessoa(pessoaDomain.getTipoPessoaEnumeration().getDescricao());
+        return pessoaResponseDTO;
     }
 
 }
