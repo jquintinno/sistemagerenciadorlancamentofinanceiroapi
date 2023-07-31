@@ -18,8 +18,8 @@ public class PessoaController {
     private PessoaService pessoaService;
 
     @PostMapping
-    public PessoaResponseDTO create(@RequestBody PessoaRequestDTO pessoaRequestDTO) {
-        return this.pessoaService.create(pessoaRequestDTO);
+    public PessoaResponseDTO createOne(@RequestBody PessoaRequestDTO pessoaRequestDTO) {
+        return this.pessoaService.createOne(pessoaRequestDTO);
     }
 
     @GetMapping

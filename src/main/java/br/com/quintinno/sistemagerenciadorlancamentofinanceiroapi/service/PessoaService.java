@@ -18,7 +18,7 @@ public class PessoaService {
     @Autowired
     private PessoaRepository pessoaRepository;
 
-    public PessoaResponseDTO create(PessoaRequestDTO pessoaRequestDTO) {
+    public PessoaResponseDTO createOne(PessoaRequestDTO pessoaRequestDTO) {
         PessoaDomain pessoaDomain = new PessoaDomain();
             pessoaDomain.setNome(pessoaRequestDTO.getNome());
             pessoaDomain.setTipoPessoaEnumeration(TipoPessoaEnumeration.converter(pessoaRequestDTO.getTipoPessoaResponseDTO()));
@@ -26,7 +26,7 @@ public class PessoaService {
         PessoaResponseDTO pessoaResponseDTO = new PessoaResponseDTO();
             pessoaResponseDTO.setCodigo(pessoaDomain.getCodigo());
             pessoaResponseDTO.setNome(pessoaDomain.getNome());
-            pessoaResponseDTO.setTipoPessoaResponseDTO(pessoaRequestDTO.getTipoPessoaResponseDTO());
+            pessoaResponseDTO.setTipoPessoa(pessoaRequestDTO.getTipoPessoaResponseDTO().getDescricao());
         return pessoaResponseDTO;
     }
 
@@ -34,7 +34,7 @@ public class PessoaService {
         List<PessoaResponseDTO> pessoaResponseDTOList = new ArrayList<>();
         this.pessoaRepository.findAll().forEach( pessoaDomain -> {
             pessoaResponseDTOList.add(new PessoaResponseDTO(pessoaDomain.getCodigo(),
-                    TipoPessoaResponseDTO.converterEnumerationToDTO(pessoaDomain.getTipoPessoaEnumeration().getCodigo()),
+                    pessoaDomain.getTipoPessoaEnumeration().getDescricao(),
                     pessoaDomain.getNome()));
         });
         return pessoaResponseDTOList;
@@ -49,7 +49,7 @@ public class PessoaService {
             pessoaResponseDTO.setNome(pessoaDomain.getNome());
             this.searchTipoPessoaAll().forEach( tipoPessoaResponseDTO -> {
                 if (tipoPessoaResponseDTO.getCodigo() == pessoaDomain.getTipoPessoaEnumeration().getCodigo()) {
-                    pessoaResponseDTO.setTipoPessoaResponseDTO(tipoPessoaResponseDTO);
+                    pessoaResponseDTO.setTipoPessoa(tipoPessoaResponseDTO.getDescricao());
                 }
             });
         return pessoaResponseDTO;
@@ -63,7 +63,7 @@ public class PessoaService {
             pessoaDomain = this.pessoaRepository.save(pessoaDomain);
         PessoaResponseDTO pessoaResponseDTO = new PessoaResponseDTO();
             pessoaResponseDTO.setCodigo(pessoaDomain.getCodigo());
-            pessoaResponseDTO.setTipoPessoaResponseDTO(pessoaRequestDTO.getTipoPessoaResponseDTO());
+            pessoaResponseDTO.setTipoPessoa(pessoaRequestDTO.getTipoPessoaResponseDTO().getDescricao());
             pessoaDomain.setNome(pessoaDomain.getNome());
         return pessoaResponseDTO;
     }
