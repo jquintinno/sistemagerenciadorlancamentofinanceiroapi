@@ -163,6 +163,20 @@ insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_venc
 insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((3), 11, '2023-11-10', null, 250, 0, 0, 250);
 insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((3), 12, '2023-12-10', null, 250, 0, 0, 250);
 
+insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((4), 1, '2023-01-10', '2023-01-10', 100, 0, 0, 100);
+insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((4), 2, '2023-02-10', '2023-02-10', 100, 0, 0, 100);
+insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((4), 3, '2023-03-10', '2023-03-10', 100, 0, 0, 100);
+insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((4), 4, '2023-04-10', '2023-04-10', 100, 0, 0, 100);
+insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((4), 5, '2023-05-10', '2023-05-10', 100, 0, 0, 100);
+insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((4), 6, '2023-06-10', '2023-06-10', 100, 0, 0, 100);
+insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((4), 7, '2023-07-10', '2023-07-10', 100, 0, 0, 100);
+insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((4), 8, '2023-08-10', null, 100, 0, 0, 100);
+insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((4), 9, '2023-09-10', null, 100, 0, 0, 100);
+insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((4), 10, '2023-10-10', null, 100, 0, 0, 100);
+insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((4), 11, '2023-11-10', null, 100, 0, 0, 100);
+insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((4), 12, '2023-12-10', null, 100, 0, 0, 100);
+
+
 /*
 
 	select * from tb_pessoa;
@@ -218,5 +232,33 @@ insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_venc
 	join tb_produto_servico produto_servico on produto_servico.codigo = lancamento_financeiro_produto_servico.id_produto_servico
 	join tb_parcelamento parcelamento on parcelamento.id_lancamento_financeiro = lancamento_financeiro.codigo
 	where data_vencimento between date_trunc('month', now())::date and (date_trunc('month', now()) + interval '1 month' -interval '1 day')::date;
+	
+	-- Recuperar todos os lancamento Financeiros em aberto (por período - agregado)
+	select 
+		lancamento_financeiro.codigo as id_lancamento,
+		pessoa_lancamento_financeiro.nome as favorecido,
+		categoria_lancamento_financeiro.nome as categoria,
+		produto_servico.nome as produto_servico,
+		to_char(parcelamento.data_vencimento, 'dd/mm/yyyy') as data_prevista_pagamento,
+		to_char(parcelamento.data_pagamento, 'dd/mm/yyyy') as data_pagamento,
+		parcelamento.valor_total_parcela as valor,
+		sum(parcelamento.valor_total_parcela) over (partition by categoria_lancamento_financeiro.nome) as totalizador
+	-- select *
+	from tb_lancamento_financeiro lancamento_financeiro
+	join tb_categoria_lancamento_financeiro categoria_lancamento_financeiro on categoria_lancamento_financeiro.codigo = lancamento_financeiro.id_categoria_lancamento_financeiro 
+	join tb_pessoa pessoa_lancamento_financeiro on pessoa_lancamento_financeiro.codigo = lancamento_financeiro.id_pessoa_lancamento_financeiro
+	join tb_pessoa pessoa_responsavel on pessoa_responsavel.codigo = lancamento_financeiro.id_pessoa_responsavel
+	join tb_lancamento_financeiro_produto_servico lancamento_financeiro_produto_servico on lancamento_financeiro_produto_servico.id_lancamento_financeiro = lancamento_financeiro.codigo
+	join tb_produto_servico produto_servico on produto_servico.codigo = lancamento_financeiro_produto_servico.id_produto_servico
+	join tb_parcelamento parcelamento on parcelamento.id_lancamento_financeiro = lancamento_financeiro.codigo
+	where data_vencimento between date_trunc('month', now())::date and (date_trunc('month', now()) + interval '1 month' -interval '1 day')::date
+	group by 
+		lancamento_financeiro.codigo,
+		pessoa_lancamento_financeiro.nome,
+		categoria_lancamento_financeiro.nome,
+		produto_servico.nome,
+		parcelamento.data_vencimento,
+		parcelamento.data_pagamento,
+		parcelamento.valor_total_parcela;
 
 */
