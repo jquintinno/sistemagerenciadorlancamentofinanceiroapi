@@ -6,6 +6,8 @@ import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.service.Produt
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/produto-servico")
 @CrossOrigin("*")
@@ -17,6 +19,11 @@ public class ProdutoServicoController {
     @PostMapping
     public ProdutoServicoResponseDTO createOne(@RequestBody ProdutoServicoRequestDTO produtoServicoRequestDTO) {
         return this.produtoServicoService.createOne(produtoServicoRequestDTO);
+    }
+
+    @GetMapping
+    public List<ProdutoServicoResponseDTO> searchAll() {
+        return this.produtoServicoService.searchAll();
     }
 
 }

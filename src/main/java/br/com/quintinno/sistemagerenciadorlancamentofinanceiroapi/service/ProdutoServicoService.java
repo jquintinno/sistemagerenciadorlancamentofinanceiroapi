@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProdutoServicoService {
@@ -19,8 +20,8 @@ public class ProdutoServicoService {
         return ProdutoServicoResponseDTO.convert(this.produtoServicoRepository.save(ProdutoServicoDomain.convert(produtoServicoRequestDTO)));
     }
 
-    public List<Void> searchAll() {
-        return null;
+    public List<ProdutoServicoResponseDTO> searchAll() {
+        return this.produtoServicoRepository.findAll().stream().map(ProdutoServicoResponseDTO::convert).collect(Collectors.toList());
     }
 
 }
