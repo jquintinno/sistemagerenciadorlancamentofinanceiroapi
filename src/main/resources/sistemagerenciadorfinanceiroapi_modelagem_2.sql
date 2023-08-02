@@ -85,7 +85,7 @@ create table if not exists tb_produto_servico (
 insert into tb_produto_servico (nome, descricao) values ('Salário Mensalista CLT', null);
 insert into tb_produto_servico (nome, descricao) values ('Consórcio Keter Torah', null);
 insert into tb_produto_servico (nome, descricao) values ('Doação para Pessoa Jurídica', null);
-insert into tb_produto_servico (nome, descricao) values ('Plano de telefonia e internet móvel', null);
+insert into tb_produto_servico (nome, descricao) values ('Plano de Telefonia e Internet Móvel', null);
 
 create table if not exists tb_lancamento_financeiro_produto_servico (
 	codigo bigserial not null,
@@ -177,6 +177,19 @@ insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_venc
 insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((4), 12, '2023-12-10', null, 100, 0, 0, 100);
 
 
+insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((5), 1, '2023-01-10', '2023-01-10', 60, 0, 0, 60);
+insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((5), 2, '2023-02-10', '2023-02-10', 60, 0, 0, 60);
+insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((5), 3, '2023-03-10', '2023-03-10', 60, 0, 0, 60);
+insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((5), 4, '2023-04-10', '2023-04-10', 60, 0, 0, 60);
+insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((5), 5, '2023-05-10', '2023-05-10', 60, 0, 0, 60);
+insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((5), 6, '2023-06-10', '2023-06-10', 60, 0, 0, 60);
+insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((5), 7, '2023-07-10', null, 60, 0, 0, 60);
+insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((5), 8, '2023-08-10', null, 60, 0, 0, 60);
+insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((5), 9, '2023-09-10', null, 60, 0, 0, 60);
+insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((5), 10, '2023-10-10', null, 60, 0, 0, 60);
+insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((5), 11, '2023-11-10', null, 60, 0, 0, 60);
+insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((5), 12, '2023-12-10', null, 60, 0, 0, 60);
+
 /*
 
 	select * from tb_pessoa;
@@ -260,5 +273,54 @@ insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_venc
 		parcelamento.data_vencimento,
 		parcelamento.data_pagamento,
 		parcelamento.valor_total_parcela;
-
+		
+	-- Recuperar Despesas Mensais vencidas
+	select *
+	from tb_parcelamento parcelamento
+	where parcelamento.data_pagamento is null
+	and parcelamento.data_vencimento <= (date_trunc('month', now())::date)
+	order by parcelamento.data_vencimento asc;
+	
+	-- Recuperar Despesa Mensais com Valor Consolidado com Despesas Vencidas
+	select 
+		id_lancamento_financeiro,
+		favorecido,
+		categoria,
+		-- produto_servico,
+		(valor_parcela * quantidade_atraso) as valor
+	from (
+		select 
+			count(parcelamento.id_lancamento_financeiro) quantidade_atraso,
+			parcelamento.id_lancamento_financeiro,
+			pessoa_lancamento_financeiro.nome as favorecido,
+			categoria_lancamento_financeiro.nome as categoria,
+			-- produto_servico.nome as produto_servico,
+			-- to_char(parcelamento.data_vencimento, 'dd/mm/yyyy') as data_prevista_pagamento,
+			-- to_char(parcelamento.data_pagamento, 'dd/mm/yyyy') as data_pagamento,
+			parcelamento.valor_parcela
+		from tb_parcelamento parcelamento
+		join tb_lancamento_financeiro lancamento_financeiro on lancamento_financeiro.codigo = parcelamento.id_lancamento_financeiro
+		join tb_pessoa pessoa_lancamento_financeiro on pessoa_lancamento_financeiro.codigo = lancamento_financeiro.id_pessoa_lancamento_financeiro
+		join tb_categoria_lancamento_financeiro categoria_lancamento_financeiro on categoria_lancamento_financeiro.codigo = lancamento_financeiro.id_categoria_lancamento_financeiro
+		-- join tb_lancamento_financeiro_produto_servico lancamento_financeiro_produto_servico on lancamento_financeiro_produto_servico.id_lancamento_financeiro = lancamento_financeiro.codigo
+		-- join tb_produto_servico produto_servico on produto_servico.codigo = lancamento_financeiro_produto_servico.id_produto_servico
+		where 1 = 1
+		and parcelamento.data_pagamento is null
+		and parcelamento.data_vencimento <= (date_trunc('month', now())::date)
+		or parcelamento.data_vencimento between date_trunc('month', now())::date and (date_trunc('month', now()) + interval '1 month' -interval '1 day')::date
+		group by 
+			parcelamento.id_lancamento_financeiro,
+			parcelamento.valor_parcela,
+			categoria_lancamento_financeiro.nome,
+			pessoa_lancamento_financeiro.nome
+			-- parcelamento.data_vencimento,
+			-- parcelamento.data_pagamento
+			-- produto_servico.nome
+		order by parcelamento.id_lancamento_financeiro
+	) as parcelamento_atraso;
+	
 */
+
+
+
+
