@@ -13,6 +13,9 @@ drop table if exists tb_pagamento_parcelamento cascade;
 drop table if exists tb_pessoa cascade;
 drop table if exists tb_categoria_senha cascade;
 drop table if exists tb_senha cascade;
+drop table if exists tb_estado cascade;
+drop table if exists tb_cidade cascade;
+drop table if exists tb_endereco cascade;
 
 create table if not exists tb_pessoa(
 	codigo bigserial not null,
@@ -227,6 +230,47 @@ insert into tb_senha (id_categoria_senha, id_pessoa, descricao, identificador, s
 insert into tb_senha (id_categoria_senha, id_pessoa, descricao, identificador, senha, ativo) values (
 	(4), (1), 'E-mail do GMAIL (jquintinno@gmail.com)', 'jquintinno@gmail.com', 'ead649be-29ad-43fd-8f98-d9ef5b314fbd', true
 );
+
+create table if not exists tb_estado (
+	codigo bigserial not null,
+	nome varchar(100) not null,
+	sigla char(2) not null,
+	constraint pk_estado primary key (codigo)
+);
+
+create table if not exists tb_cidade (
+	codigo bigserial not null,
+	id_estado serial not null,
+	nome varchar(100) not null,
+	constraint pk_cidade primary key (codigo),
+	constraint fk_estado foreign key (id_estado) references tb_estado (codigo)
+);
+
+create table if not exists tb_endereco (
+	codigo bigserial not null,
+	id_pessoa serial not null,
+	id_cidade serial not null,
+	endereco varchar(100) not null,
+	numero varchar(20) null,
+	bairro varchar(100) null,
+	cep varchar(20) not null,
+	e_principal boolean not null,
+	constraint pk_endereco primary key (codigo),
+	constraint fk_pessoa foreign key (id_pessoa) references tb_pessoa (codigo),
+	constraint fk_cidade foreign key (id_cidade) references tb_cidade (codigo)
+);
+
+insert into tb_estado (nome, sigla) values ('Goiás', 'GO');
+insert into tb_estado (nome, sigla) values ('Distrito Federal', 'DF');
+
+insert into tb_cidade (id_estado, nome) values (1, 'Goiânia');
+insert into tb_cidade (id_estado, nome) values (1, 'Novo Gama');
+insert into tb_cidade (id_estado, nome) values (2, 'Brazlândia');
+insert into tb_cidade (id_estado, nome) values (2, 'Paranoá');
+insert into tb_cidade (id_estado, nome) values (2, 'Gama');
+
+insert into tb_endereco (id_pessoa, id_cidade, endereco, numero, bairro, cep, e_principal) values (1, 1, 'Quadra SMLN ML Trecho 7 Conjunto 2', null, null, '72410-103', true);
+insert into tb_endereco (id_pessoa, id_cidade, endereco, numero, bairro, cep, e_principal) values (1, 3, 'Quadra Quadra 1 Conjunto C', null, null, '72410-103', true);
 
 /*
 
