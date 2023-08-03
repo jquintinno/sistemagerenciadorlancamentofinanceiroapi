@@ -21,3 +21,4 @@
          SISGERLANFIN02082023163221
 
             Feature: Endpoints Gerenciador de Produtos e Serviços
+            Feature: Cadastro de Carga Básica de Dados via arquivo JSON
