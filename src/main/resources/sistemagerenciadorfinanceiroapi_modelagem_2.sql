@@ -11,6 +11,8 @@ drop table if exists tb_conta_bancaria cascade;
 drop table if exists tb_forma_pagamento cascade;
 drop table if exists tb_pagamento_parcelamento cascade;
 drop table if exists tb_pessoa cascade;
+drop table if exists tb_categoria_senha cascade;
+drop table if exists tb_senha cascade;
 
 create table if not exists tb_pessoa(
 	codigo bigserial not null,
@@ -190,6 +192,42 @@ insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_venc
 insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((5), 11, '2023-11-10', null, 60, 0, 0, 60);
 insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_vencimento, data_pagamento, valor_parcela, valor_desconto, valor_juros, valor_total_parcela) values ((5), 12, '2023-12-10', null, 60, 0, 0, 60);
 
+create table if not exists tb_categoria_senha (
+	codigo bigserial not null, 
+	descricao varchar(100) not null,
+	constraint pk_categoria_senha primary key (codigo)
+);
+
+create table if not exists tb_senha (
+	codigo bigserial not null,
+	id_categoria_senha serial not null,
+	id_pessoa serial not null,
+	descricao varchar(100) not null,
+	identificador varchar(100) null,
+	senha varchar(50) not null,
+	ativo boolean not null,
+	constraint pk_senha primary key (codigo),
+	constraint fk_categoria_senha foreign key (id_categoria_senha) references tb_categoria_senha (codigo),
+	constraint fk_pessoa foreign key (id_pessoa) references tb_pessoa (codigo)
+);
+
+insert into tb_categoria_senha (descricao) values ('Aplicativo');
+insert into tb_categoria_senha (descricao) values ('Cartão Bancário');
+insert into tb_categoria_senha (descricao) values ('Cartão Benefício');
+insert into tb_categoria_senha (descricao) values ('E-mail');
+
+insert into tb_senha (id_categoria_senha, id_pessoa, descricao, identificador, senha, ativo) values (
+	(2), (1), 'Cartão do Banco do Brasil', null, '770ac799-d7ff-4641-9815-d860ed521e16', true
+);
+
+insert into tb_senha (id_categoria_senha, id_pessoa, descricao, identificador, senha, ativo) values (
+	(1), (1), 'Aplicativo do Banco do Brasil', null, '09f12c67-a236-49a4-bab7-3325755d3736', true
+);
+
+insert into tb_senha (id_categoria_senha, id_pessoa, descricao, identificador, senha, ativo) values (
+	(4), (1), 'E-mail do GMAIL (jquintinno@gmail.com)', 'jquintinno@gmail.com', 'ead649be-29ad-43fd-8f98-d9ef5b314fbd', true
+);
+
 /*
 
 	select * from tb_pessoa;
@@ -198,6 +236,8 @@ insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_venc
 	select * from tb_produto_servico;
 	select * from tb_lancamento_financeiro_produto_servico;
 	select * from tb_parcelamento;
+	select * from tb_categoria_senha;
+	select * from tb_senha;
 	
 	-- Recuperar todos os lancamento Financeiros
 	select 
