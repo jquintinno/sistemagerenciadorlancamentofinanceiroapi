@@ -13,6 +13,11 @@ public class PessoaRequestDTO {
 
     public PessoaRequestDTO() { }
 
+    public PessoaRequestDTO(String nome) {
+        this.nome = nome;
+        this.tipoPessoaResponseDTO = TipoPessoaResponseDTO.converterEnumerationToDTO(1);
+    }
+
     public PessoaRequestDTO(Long codigo, TipoPessoaResponseDTO tipoPessoaResponseDTO, String nome) {
         this.codigo = codigo;
         this.tipoPessoaResponseDTO = tipoPessoaResponseDTO;
