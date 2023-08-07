@@ -53,7 +53,9 @@ create table tb_lancamento_financeiro (
 	dia_vencimento_parcela integer null,
 	quantidade_parcela integer null,
 	constraint pk_lancamento_financeiro primary key (codigo),
-	constraint fk_categoria_lancamento_financeiro foreign key (id_categoria_lancamento_financeiro) references tb_categoria_lancamento_financeiro (codigo)
+	constraint fk_categoria_lancamento_financeiro foreign key (id_categoria_lancamento_financeiro) references tb_categoria_lancamento_financeiro (codigo),
+	constraint fk_pessoa_lancamento_financeiro foreign key (id_pessoa_lancamento_financeiro) references tb_pessoa (codigo),
+	constraint fk_pessoa_responsavel foreign key (id_pessoa_responsavel) references tb_pessoa (codigo)
 );
 
 insert into tb_lancamento_financeiro (id_categoria_lancamento_financeiro, id_pessoa_lancamento_financeiro, id_pessoa_responsavel, data_lancamento_financeiro, dia_vencimento_parcela, quantidade_parcela) values (
