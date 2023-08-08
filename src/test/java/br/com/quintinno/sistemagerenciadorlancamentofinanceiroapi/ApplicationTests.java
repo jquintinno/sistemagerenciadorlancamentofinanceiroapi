@@ -22,6 +22,8 @@ class ApplicationTests {
 
 	private static final String ARQUIVO_PESSOAS = "pessoas.json";
 
+	private static final String ARQUIVO_BANCOS = "bancos.json";
+
 	@Autowired
 	private PessoaService pessoaService;
 
@@ -33,17 +35,29 @@ class ApplicationTests {
 	}
 
 	@Test
-	public void deveLerArquivoJSONGravarDadosBanco() throws IOException {
+	public void deveLerArquivoJSONPessoasGravarDadosBanco() throws IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		File file = new File(ARQUIVO_PESSOAS);
 		JsonNode jsonNodeRoot = objectMapper.readTree(file.getAbsoluteFile());
 		for (JsonNode jsonNode : jsonNodeRoot) {
-			PessoaRequestDTO pessoaRequestDTOFilho = new PessoaRequestDTO(jsonNode.get("nome").asText());
-			PessoaRequestDTO pessoaRequestDTOMae = new PessoaRequestDTO(jsonNode.get("mae").asText());
-			PessoaRequestDTO pessoaRequestDTOPai = new PessoaRequestDTO(jsonNode.get("pai").asText());
+			PessoaRequestDTO pessoaRequestDTOFilho = new PessoaRequestDTO(jsonNode.get("nome").asText(), 1);
+			PessoaRequestDTO pessoaRequestDTOMae = new PessoaRequestDTO(jsonNode.get("mae").asText(), 1);
+			PessoaRequestDTO pessoaRequestDTOPai = new PessoaRequestDTO(jsonNode.get("pai").asText(), 1);
 				this.pessoaService.createOne(pessoaRequestDTOFilho);
 				this.pessoaService.createOne(pessoaRequestDTOMae);
 				this.pessoaService.createOne(pessoaRequestDTOPai);
+		}
+		Assertions.assertEquals(jsonNodeRoot != null, true);
+	}
+
+	@Test
+	public void deveLerArquivoJSONBancosGravarDadosBanco() throws IOException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		File file = new File(ARQUIVO_BANCOS);
+		JsonNode jsonNodeRoot = objectMapper.readTree(file.getAbsoluteFile());
+		for (JsonNode jsonNode : jsonNodeRoot) {
+			PessoaRequestDTO pessoaRequestDTO = new PessoaRequestDTO(jsonNode.get("LongName").asText(), 2);
+			this.pessoaService.createOne(pessoaRequestDTO);
 		}
 		Assertions.assertEquals(jsonNodeRoot != null, true);
 	}

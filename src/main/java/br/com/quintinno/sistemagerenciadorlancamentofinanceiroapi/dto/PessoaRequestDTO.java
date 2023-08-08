@@ -13,9 +13,9 @@ public class PessoaRequestDTO {
 
     public PessoaRequestDTO() { }
 
-    public PessoaRequestDTO(String nome) {
+    public PessoaRequestDTO(String nome, Integer codigoTipoPessoa) {
         this.nome = nome;
-        this.tipoPessoaResponseDTO = TipoPessoaResponseDTO.converterEnumerationToDTO(1);
+        this.tipoPessoaResponseDTO = TipoPessoaResponseDTO.converterEnumerationToDTO(codigoTipoPessoa);
     }
 
     public PessoaRequestDTO(Long codigo, TipoPessoaResponseDTO tipoPessoaResponseDTO, String nome) {

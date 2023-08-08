@@ -32,6 +32,11 @@ public class PessoaController {
         return this.pessoaService.searchOne(codigoPessoa);
     }
 
+    @GetMapping("/filtro/{nomePessoa}")
+    public List<PessoaResponseDTO> searchOne(@PathVariable("nomePessoa") String nomePessoa) {
+        return this.pessoaService.searchOne(nomePessoa);
+    }
+
     @GetMapping("/tipo-pessoa")
     public List<TipoPessoaResponseDTO> searchTipoPessoaAll() {
         return this.pessoaService.searchTipoPessoaAll();

@@ -6,18 +6,23 @@ import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto.PessoaRequ
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto.PessoaResponseDTO;
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto.TipoPessoaResponseDTO;
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.enumeration.TipoPessoaEnumeration;
+import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.repository.PessoaImplementacaoRepository;
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PessoaService {
 
     @Autowired
     private PessoaRepository pessoaRepository;
+
+    @Autowired
+    private PessoaImplementacaoRepository pessoaImplementacaoRepository;
 
     private final ModelMapperConfiguration modelMapperConfiguration;
 
@@ -54,6 +59,26 @@ public class PessoaService {
                 }
             });
         return pessoaResponseDTO;
+    }
+
+    public List<PessoaResponseDTO> searchOne(String nomePessoa) {
+        List<PessoaResponseDTO> pessoaResponseDTOList = new ArrayList<>();
+        List<PessoaDomain> pessoaDomainList = this.pessoaImplementacaoRepository.recuperarPessoaNome(nomePessoa);
+        if (pessoaDomainList.isEmpty()) {
+            return pessoaResponseDTOList;
+        }
+        pessoaDomainList.forEach( pessoaDomain -> {
+            PessoaResponseDTO pessoaResponseDTO = new PessoaResponseDTO();
+                pessoaResponseDTO.setCodigo(pessoaDomain.getCodigo());
+                pessoaResponseDTO.setNome(pessoaDomain.getNome());
+                this.searchTipoPessoaAll().forEach( tipoPessoaResponseDTO -> {
+                    if (tipoPessoaResponseDTO.getCodigo() == pessoaDomain.getTipoPessoaEnumeration().getCodigo()) {
+                        pessoaResponseDTO.setTipoPessoaResponseDTO(tipoPessoaResponseDTO);
+                    }
+                });
+            pessoaResponseDTOList.add(pessoaResponseDTO);
+        });
+        return pessoaResponseDTOList;
     }
 
     public PessoaResponseDTO updateOne(PessoaRequestDTO pessoaRequestDTO) {
