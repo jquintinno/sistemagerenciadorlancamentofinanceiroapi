@@ -1,4 +1,3 @@
-drop table if exists tb_pessoa cascade;
 drop table if exists tb_categoria_lancamento_financeiro cascade;
 drop table if exists tb_conta_bancaria cascade;
 drop table if exists tb_forma_pagamento cascade;
@@ -8,6 +7,7 @@ drop table if exists tb_lancamento_financeiro_produto_servico cascade;
 drop table if exists tb_pagamento_parcela cascade;
 drop table if exists tb_parcelamento cascade;
 drop table if exists tb_pagamento_parcelamento cascade;
+drop table if exists tb_pessoa cascade;
 
 create table if not exists tb_pessoa (
 	codigo bigserial not null,
@@ -27,7 +27,7 @@ create table if not exists tb_lancamento_financeiro (
 	id_categoria_lancamento_financeiro serial not null,
 	id_pessoa_lancamento_financeiro serial not null,
 	id_pessoa_responsavel serial not null,
-	data_lancamento_financeiro timestamp not null, 
+	data_lancamento_financeiro timestamp not null,
 	valor_total_lancamento_financeiro numeric(10,2) not null,
 	dia_vencimento_parcela integer null,
 	quantidade_parcela integer not null default 1,
@@ -77,16 +77,15 @@ create table if not exists tb_parcelamento (
 );
 
 create table if not exists tb_conta_bancaria (
-	codigo bigserial not null, 
-	id_pessoa_conta_bancaria serial not null, 
-	id_pessoa_titular serial not null, 
+	codigo bigserial not null,
+	id_pessoa_conta_bancaria serial not null,
+	id_pessoa_titular serial not null,
 	tipo_conta_bancaria varchar(50) not null check ( tipo_conta_bancaria in ('CONTA_ESPECIAL', 'CONTA_SALARIO', 'CONTA_CORRENTE', 'CONTA_POUPANCA', 'CONTA_INVESTIMENTO')),
-	identificador varchar(100) null,
 	numero varchar(50) not null unique,
 	numero_agencia varchar(20) not null unique,
 	data_abertura date null,
 	data_enceramento date null,
-	e_conta_bancaria_principal boolean not null, 
+	bol_conta_bancaria_principal boolean not null default true,
 	constraint pk_conta_bancaria primary key (codigo),
 	constraint fk_pessoa_conta_bancaria foreign key (id_pessoa_conta_bancaria) references tb_pessoa (codigo),
 	constraint fk_pessoa_titular foreign key (id_pessoa_titular) references tb_pessoa (codigo)
@@ -124,7 +123,7 @@ insert into tb_categoria_lancamento_financeiro (nome) values ('Adquirição de E
 insert into tb_categoria_lancamento_financeiro (nome) values ('Concessão de Empréstimo (Pessoa Física)');
 insert into tb_categoria_lancamento_financeiro (nome) values ('Concessão de Empréstimo (Pessoa Jurídica)');
 
-insert into tb_lancamento_financeiro (id_categoria_lancamento_financeiro, id_pessoa_lancamento_financeiro, id_pessoa_responsavel, 
+insert into tb_lancamento_financeiro (id_categoria_lancamento_financeiro, id_pessoa_lancamento_financeiro, id_pessoa_responsavel,
 data_lancamento_financeiro, valor_total_lancamento_financeiro, dia_vencimento_parcela, quantidade_parcela) values (
 	(select codigo from tb_categoria_lancamento_financeiro where nome = 'Despesa Variável'),
 	(select codigo from tb_pessoa where nome = 'Amazon Brasil'),
@@ -148,16 +147,16 @@ insert into tb_parcelamento (id_lancamento_financeiro, numero_parcela, data_venc
 	1, null, 3689.11, 0, 0, 3689.11
 );
 
-insert into tb_conta_bancaria (id_pessoa_conta_bancaria, id_pessoa_titular, tipo_conta_bancaria, identificador, numero, numero_agencia, data_abertura, data_enceramento, e_conta_bancaria_principal) values (
+insert into tb_conta_bancaria (id_pessoa_conta_bancaria, id_pessoa_titular, tipo_conta_bancaria, numero, numero_agencia, data_abertura, DATA_ENCERRAMENTO, bol_conta_bancaria_principal) values (
 	(1),
 	(1),
-	'CONTA_ESPECIAL', 'Conta Especial', '00000-X', '0000', null, null, true
+	'CONTA_ESPECIAL', '00000-X', '0000', null, null, true
 );
 
-insert into tb_conta_bancaria (id_pessoa_conta_bancaria, id_pessoa_titular, tipo_conta_bancaria, identificador, numero, numero_agencia, data_abertura, data_enceramento, e_conta_bancaria_principal) values (
+insert into tb_conta_bancaria (id_pessoa_conta_bancaria, id_pessoa_titular, tipo_conta_bancaria, numero, numero_agencia, data_abertura, DATA_ENCERRAMENTO, bol_conta_bancaria_principal) values (
 	(2),
 	(1),
-	'CONTA_CORRENTE', null, '5689568-X', '5689', null, null, false
+	'CONTA_CORRENTE', '5689568-X', '5689', null, null, false
 );
 
 insert into tb_forma_pagamento (id_conta_bancaria, nome) values (
@@ -176,7 +175,13 @@ insert into tb_pagamento_parcelamento (id_parcelamento, id_forma_pagamento, data
 
 -- Recuperar lancamento financeiro
 
-	select 	
+	select count(*) from tb_pessoa;
+
+	select * from tb_pessoa where upper(nome) like upper('%banco%');
+
+	select * from tb_conta_bancaria;
+
+	select
 		to_char(lancamento_financeiro.data_lancamento_financeiro, 'dd/mm/yyyy') as data_compra,
 		pessoa.nome as loja,
 		produto_servico.nome as produto,
@@ -187,7 +192,7 @@ insert into tb_pagamento_parcelamento (id_parcelamento, id_forma_pagamento, data
 	-- select *
 	from tb_lancamento_financeiro lancamento_financeiro
 	join tb_pessoa pessoa on pessoa.codigo = lancamento_financeiro.id_pessoa_lancamento_financeiro
-	join tb_lancamento_financeiro_produto_servico lancamento_financeiro_produto_servico on lancamento_financeiro_produto_servico.id_lancamento_financeiro = lancamento_financeiro.codigo 
+	join tb_lancamento_financeiro_produto_servico lancamento_financeiro_produto_servico on lancamento_financeiro_produto_servico.id_lancamento_financeiro = lancamento_financeiro.codigo
 	join tb_produto_servico produto_servico on produto_servico.codigo = lancamento_financeiro_produto_servico.id_produto_servico
 	join tb_parcelamento parcelamento on parcelamento.id_lancamento_financeiro = lancamento_financeiro.codigo
 	join tb_pagamento_parcelamento pagamento_parcelamento on pagamento_parcelamento.id_parcelamento = parcelamento.codigo
@@ -195,4 +200,19 @@ insert into tb_pagamento_parcelamento (id_parcelamento, id_forma_pagamento, data
 	join tb_conta_bancaria conta_bancaria on conta_bancaria.codigo = forma_pagamento.id_conta_bancaria
 	join tb_pessoa pessoa_conta_bancaria on pessoa_conta_bancaria.codigo = conta_bancaria.id_pessoa_conta_bancaria;
 
+	-- Recuperar Contas Bancarias
+	select
+		t2.nome as intituicao_financeira,
+		t3.nome as titular,
+		t1.tipo_conta_bancaria as tipo,
+		t1.numero as numero,
+		t1.numero_agencia agencia,
+		case
+			when t1.bol_conta_bancaria_principal = 1
+			then 'Sim' else 'Não'
+		end as principal
+	-- select *
+	from tb_conta_bancaria t1
+	join tb_pessoa t2 on t2.codigo = t1.id_pessoa_conta_bancaria
+	join tb_pessoa t3 on t3.codigo = t1.id_pessoa_titular;
 */

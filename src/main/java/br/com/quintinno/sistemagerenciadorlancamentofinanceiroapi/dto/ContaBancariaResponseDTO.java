@@ -1,55 +1,44 @@
-package br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.domain;
+package br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto;
 
-import jakarta.persistence.*;
+import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.domain.PessoaDomain;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "TB_CONTA_BANCARIA")
-public class ContaBancariaDomain implements Serializable {
+public class ContaBancariaResponseDTO {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CODIGO", nullable = false)
     private Long codigo;
 
-    @ManyToOne
-    @JoinColumn(name = "ID_PESSOA_CONTA_BANCARIA", nullable = false)
     private PessoaDomain pessoaContaBancaria;
 
-    @ManyToOne
-    @JoinColumn(name = "ID_PESSOA_TITULAR", nullable = false)
     private PessoaDomain pessoaTitular;
 
-    @Column(name = "TIPO_CONTA_BANCARIA", nullable = false)
     private String tipoContaBancaria;
 
-    @Column(name = "NUMERO", unique = true, length = 10, nullable = false)
     private String numero;
 
-    @Column(name = "NUMERO_AGENCIA", unique = true, length = 10, nullable = false)
     private String numero_agencia;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "DATA_ABERTURA")
     private LocalDate dataAbertura;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "DATA_ENCERRAMENTO")
     private LocalDate dataEncerramento;
 
-    @Column(name = "BOL_CONTA_BANCARIA_PRINCIPAL", nullable = false)
     private boolean bolContaBancariaPrincipal;
 
-    public ContaBancariaDomain() { }
+    public ContaBancariaResponseDTO() { }
 
-    public ContaBancariaDomain(PessoaDomain pessoaContaBancaria, PessoaDomain pessoaTitular, String tipoContaBancaria, String numero,
-                               String numero_agencia, LocalDate dataAbertura, LocalDate dataEncerramento, boolean bolContaBancariaPrincipal) {
+    public ContaBancariaResponseDTO(PessoaDomain pessoaContaBancaria, PessoaDomain pessoaTitular, String tipoContaBancaria, String numero,
+                                    String numero_agencia, boolean bolContaBancariaPrincipal) {
+        this.pessoaContaBancaria = pessoaContaBancaria;
+        this.pessoaTitular = pessoaTitular;
+        this.tipoContaBancaria = tipoContaBancaria;
+        this.numero = numero;
+        this.numero_agencia = numero_agencia;
+        this.bolContaBancariaPrincipal = bolContaBancariaPrincipal;
+    }
+
+    public ContaBancariaResponseDTO(Long codigo, PessoaDomain pessoaContaBancaria, PessoaDomain pessoaTitular, String tipoContaBancaria, String numero,
+                                    String numero_agencia, LocalDate dataAbertura, LocalDate dataEncerramento, boolean bolContaBancariaPrincipal) {
+        this.codigo = codigo;
         this.pessoaContaBancaria = pessoaContaBancaria;
         this.pessoaTitular = pessoaTitular;
         this.tipoContaBancaria = tipoContaBancaria;
@@ -57,17 +46,7 @@ public class ContaBancariaDomain implements Serializable {
         this.numero_agencia = numero_agencia;
         this.dataAbertura = dataAbertura;
         this.dataEncerramento = dataEncerramento;
-        this.bolContaBancariaPrincipal = true;
-    }
-
-    public ContaBancariaDomain(PessoaDomain pessoaContaBancaria, PessoaDomain pessoaTitular, String tipoContaBancaria, String numero,
-                               String numero_agencia, boolean bolContaBancariaPrincipal) {
-        this.pessoaContaBancaria = pessoaContaBancaria;
-        this.pessoaTitular = pessoaTitular;
-        this.tipoContaBancaria = tipoContaBancaria;
-        this.numero = numero;
-        this.numero_agencia = numero_agencia;
-        this.bolContaBancariaPrincipal = true;
+        this.bolContaBancariaPrincipal = bolContaBancariaPrincipal;
     }
 
     public Long getCodigo() {
@@ -134,7 +113,7 @@ public class ContaBancariaDomain implements Serializable {
         this.dataEncerramento = dataEncerramento;
     }
 
-    public boolean getBolContaBancariaPrincipal() {
+    public boolean isBolContaBancariaPrincipal() {
         return bolContaBancariaPrincipal;
     }
 
