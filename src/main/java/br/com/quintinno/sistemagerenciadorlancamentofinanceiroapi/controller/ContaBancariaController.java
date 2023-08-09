@@ -2,6 +2,7 @@ package br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.controller;
 
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto.ContaBancariaRequestDTO;
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto.ContaBancariaResponseDTO;
+import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto.TipoContaBancariaResponseDTO;
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.service.ContaBancariaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,11 @@ public class ContaBancariaController {
     @GetMapping
     public List<ContaBancariaResponseDTO> searchAll() {
         return this.contaBancariaService.searchAll();
+    }
+
+    @GetMapping("/tipo")
+    public List<TipoContaBancariaResponseDTO> searchTipoContaBancaria() {
+        return this.contaBancariaService.searchTipoContaBancaria();
     }
 
 }

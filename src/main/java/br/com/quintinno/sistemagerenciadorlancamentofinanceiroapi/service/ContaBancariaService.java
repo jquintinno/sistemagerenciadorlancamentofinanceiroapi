@@ -5,6 +5,8 @@ import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.domain.ContaBa
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.domain.PessoaDomain;
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto.ContaBancariaRequestDTO;
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto.ContaBancariaResponseDTO;
+import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto.TipoContaBancariaResponseDTO;
+import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.enumeration.TipoContaBancariaEnumeration;
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.enumeration.TipoPessoaEnumeration;
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.repository.ContaBancariaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,16 @@ public class ContaBancariaService {
             contaBancariaResponseDTOList.add(contaBancariaResponseDTO);
         });
         return contaBancariaResponseDTOList;
+    }
+
+    public List<TipoContaBancariaResponseDTO> searchTipoContaBancaria() {
+        List<TipoContaBancariaResponseDTO> tipoContaBancariaResponseDTOList = new ArrayList<>();
+        for (TipoContaBancariaEnumeration tipoContaBancariaEnumeration : TipoContaBancariaEnumeration.values()) {
+            TipoContaBancariaResponseDTO tipoContaBancariaResponseDTO = modelMapperConfiguration
+                    .modelMapper().map(tipoContaBancariaEnumeration, TipoContaBancariaResponseDTO.class);
+                tipoContaBancariaResponseDTOList.add(tipoContaBancariaResponseDTO);
+        }
+        return tipoContaBancariaResponseDTOList;
     }
 
 }
