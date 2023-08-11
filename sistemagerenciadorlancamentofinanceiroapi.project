@@ -2,6 +2,7 @@
 
     -- Comandos
 
+        sudo /opt/lampp/lampp start
         mvn spring-boot:run
 
     -- Tarefas
