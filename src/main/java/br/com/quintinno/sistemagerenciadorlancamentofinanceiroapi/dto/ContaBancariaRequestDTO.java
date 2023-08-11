@@ -2,6 +2,7 @@ package br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto;
 
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.domain.PessoaDomain;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class ContaBancariaRequestDTO {
@@ -20,6 +21,10 @@ public class ContaBancariaRequestDTO {
 
     private LocalDate dataEncerramento;
 
+    private BigDecimal saldoInicial;
+
+    private String corContaBancaria;
+
     private boolean bolContaBancariaPrincipal;
 
     public ContaBancariaRequestDTO() { }
@@ -31,7 +36,7 @@ public class ContaBancariaRequestDTO {
         this.tipoContaBancaria = tipoContaBancaria;
         this.numero = numero;
         this.numero_agencia = numero_agencia;
-        this.bolContaBancariaPrincipal = bolContaBancariaPrincipal;
+        this.bolContaBancariaPrincipal = true;
     }
 
     public PessoaDomain getPessoaContaBancaria() {
@@ -88,6 +93,22 @@ public class ContaBancariaRequestDTO {
 
     public void setDataEncerramento(LocalDate dataEncerramento) {
         this.dataEncerramento = dataEncerramento;
+    }
+
+    public String getCorContaBancaria() {
+        return corContaBancaria;
+    }
+
+    public void setCorContaBancaria(String corContaBancaria) {
+        this.corContaBancaria = corContaBancaria;
+    }
+
+    public BigDecimal getSaldoInicial() {
+        return saldoInicial;
+    }
+
+    public void setSaldoInicial(BigDecimal saldoInicial) {
+        this.saldoInicial = saldoInicial;
     }
 
     public boolean isBolContaBancariaPrincipal() {
