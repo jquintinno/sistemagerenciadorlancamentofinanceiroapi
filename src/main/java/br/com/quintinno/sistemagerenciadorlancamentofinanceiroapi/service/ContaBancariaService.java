@@ -7,8 +7,10 @@ import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto.ContaBanca
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto.ContaBancariaResponseDTO;
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto.TipoContaBancariaResponseDTO;
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.enumeration.TipoContaBancariaEnumeration;
-import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.enumeration.TipoPessoaEnumeration;
+import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.repository.ContaBancariaImplementacaoRepository;
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.repository.ContaBancariaRepository;
+import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.repository.PessoaImplementacaoRepository;
+import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,15 @@ public class ContaBancariaService {
     @Autowired
     private ContaBancariaRepository contaBancariaRepository;
 
+    @Autowired
+    private PessoaRepository pessoaRepository;
+
+    @Autowired
+    private ContaBancariaImplementacaoRepository contaBancariaImplementacaoRepository;
+
+    @Autowired
+    private PessoaImplementacaoRepository pessoaImplementacaoRepository;
+
     private final ModelMapperConfiguration modelMapperConfiguration;
 
     public ContaBancariaService() {
@@ -28,8 +39,17 @@ public class ContaBancariaService {
     }
 
     public ContaBancariaResponseDTO createOne(ContaBancariaRequestDTO contaBancariaRequestDTO) {
-        ContaBancariaDomain contaBancariaDomain = modelMapperConfiguration.modelMapper().map(contaBancariaRequestDTO, ContaBancariaDomain.class);
-        contaBancariaDomain = this.contaBancariaRepository.save(contaBancariaDomain);
+        PessoaDomain pessoaContaBancaria = this.pessoaRepository.findById(contaBancariaRequestDTO.getCodigoPessoaContrada()).get();
+        TipoContaBancariaEnumeration tipoContaBancariaEnumeration = TipoContaBancariaEnumeration.converter(contaBancariaRequestDTO.getCodigoCategoriaContaBancaria());
+        ContaBancariaDomain contaBancariaDomain = new ContaBancariaDomain();
+            contaBancariaDomain.setPessoaContaBancaria(pessoaContaBancaria);
+            contaBancariaDomain.setPessoaTitular(this.recuperarUsuarioLogado());
+            contaBancariaDomain.setTipoContaBancaria(tipoContaBancariaEnumeration.name());
+            contaBancariaDomain.setNumeroContaBancaria(contaBancariaRequestDTO.getNumeroContaBancaria());
+            contaBancariaDomain.setNumeroAgenciaContaBancaria(contaBancariaRequestDTO.getNumeroAgenciaContaBancaria());
+            contaBancariaDomain.setSaldoInicial(contaBancariaRequestDTO.getSaldoInicial());
+            contaBancariaDomain = this.contaBancariaRepository.save(contaBancariaDomain);
+            this.verificarTitularContaBancariaPrincipal(contaBancariaDomain);
         return modelMapperConfiguration.modelMapper().map(contaBancariaDomain, ContaBancariaResponseDTO.class);
     }
 
@@ -51,6 +71,20 @@ public class ContaBancariaService {
                 tipoContaBancariaResponseDTOList.add(tipoContaBancariaResponseDTO);
         }
         return tipoContaBancariaResponseDTOList;
+    }
+
+    private PessoaDomain recuperarUsuarioLogado() {
+        return new PessoaDomain(358L);
+    }
+
+    // Verificar se uma determinada pessoa ja tem uma conta bancaria principal e ativa, caso verdadeiro,
+    // deve-se atribuir falso para conta antiga e atribuir true a nova conta
+    private void verificarTitularContaBancariaPrincipal(ContaBancariaDomain contaBancariaDomain) {
+        if (this.contaBancariaImplementacaoRepository.bolVerificarTitularContaBancariaPrincipal(contaBancariaDomain.getPessoaTitular().getCodigo())) {
+            this.contaBancariaImplementacaoRepository.recuperarContaBancariaPessoaTitular(contaBancariaDomain.getCodigo(), contaBancariaDomain.getPessoaTitular().getCodigo()).forEach( result -> {
+                this.contaBancariaImplementacaoRepository.alterarContaBancariaPrincipal(result.getCodigo());
+            });
+        }
     }
 
 }

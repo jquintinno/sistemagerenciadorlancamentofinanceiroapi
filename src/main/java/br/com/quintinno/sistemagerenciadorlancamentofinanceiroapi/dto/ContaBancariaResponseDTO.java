@@ -2,7 +2,7 @@ package br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto;
 
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.domain.PessoaDomain;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
 
 public class ContaBancariaResponseDTO {
 
@@ -14,40 +14,17 @@ public class ContaBancariaResponseDTO {
 
     private String tipoContaBancaria;
 
-    private String numero;
+    private String numeroContaBancaria;
 
-    private String numero_agencia;
+    private String numeroAgenciaContaBancaria;
 
-    private LocalDate dataAbertura;
+    private BigDecimal saldoInicial;
 
-    private LocalDate dataEncerramento;
+    private String corContaBancaria;
 
     private boolean bolContaBancariaPrincipal;
 
     public ContaBancariaResponseDTO() { }
-
-    public ContaBancariaResponseDTO(PessoaDomain pessoaContaBancaria, PessoaDomain pessoaTitular, String tipoContaBancaria, String numero,
-                                    String numero_agencia, boolean bolContaBancariaPrincipal) {
-        this.pessoaContaBancaria = pessoaContaBancaria;
-        this.pessoaTitular = pessoaTitular;
-        this.tipoContaBancaria = tipoContaBancaria;
-        this.numero = numero;
-        this.numero_agencia = numero_agencia;
-        this.bolContaBancariaPrincipal = bolContaBancariaPrincipal;
-    }
-
-    public ContaBancariaResponseDTO(Long codigo, PessoaDomain pessoaContaBancaria, PessoaDomain pessoaTitular, String tipoContaBancaria, String numero,
-                                    String numero_agencia, LocalDate dataAbertura, LocalDate dataEncerramento, boolean bolContaBancariaPrincipal) {
-        this.codigo = codigo;
-        this.pessoaContaBancaria = pessoaContaBancaria;
-        this.pessoaTitular = pessoaTitular;
-        this.tipoContaBancaria = tipoContaBancaria;
-        this.numero = numero;
-        this.numero_agencia = numero_agencia;
-        this.dataAbertura = dataAbertura;
-        this.dataEncerramento = dataEncerramento;
-        this.bolContaBancariaPrincipal = bolContaBancariaPrincipal;
-    }
 
     public Long getCodigo() {
         return codigo;
@@ -81,36 +58,36 @@ public class ContaBancariaResponseDTO {
         this.tipoContaBancaria = tipoContaBancaria;
     }
 
-    public String getNumero() {
-        return numero;
+    public String getNumeroContaBancaria() {
+        return numeroContaBancaria;
     }
 
-    public void setNumero(String numero) {
-        this.numero = numero;
+    public void setNumeroContaBancaria(String numeroContaBancaria) {
+        this.numeroContaBancaria = numeroContaBancaria;
     }
 
-    public String getNumero_agencia() {
-        return numero_agencia;
+    public String getNumeroAgenciaContaBancaria() {
+        return numeroAgenciaContaBancaria;
     }
 
-    public void setNumero_agencia(String numero_agencia) {
-        this.numero_agencia = numero_agencia;
+    public void setNumeroAgenciaContaBancaria(String numeroAgenciaContaBancaria) {
+        this.numeroAgenciaContaBancaria = numeroAgenciaContaBancaria;
     }
 
-    public LocalDate getDataAbertura() {
-        return dataAbertura;
+    public BigDecimal getSaldoInicial() {
+        return saldoInicial;
     }
 
-    public void setDataAbertura(LocalDate dataAbertura) {
-        this.dataAbertura = dataAbertura;
+    public void setSaldoInicial(BigDecimal saldoInicial) {
+        this.saldoInicial = saldoInicial;
     }
 
-    public LocalDate getDataEncerramento() {
-        return dataEncerramento;
+    public String getCorContaBancaria() {
+        return corContaBancaria;
     }
 
-    public void setDataEncerramento(LocalDate dataEncerramento) {
-        this.dataEncerramento = dataEncerramento;
+    public void setCorContaBancaria(String corContaBancaria) {
+        this.corContaBancaria = corContaBancaria;
     }
 
     public boolean isBolContaBancariaPrincipal() {

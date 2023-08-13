@@ -29,6 +29,10 @@ public class PessoaDomain implements Serializable {
 
     public PessoaDomain() { }
 
+    public PessoaDomain(Long codigo) {
+        this.codigo = codigo;
+    }
+
     public Long getCodigo() {
         return codigo;
     }

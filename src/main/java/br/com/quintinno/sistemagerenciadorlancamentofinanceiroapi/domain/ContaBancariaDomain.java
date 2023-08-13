@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -29,11 +30,11 @@ public class ContaBancariaDomain implements Serializable {
     @Column(name = "TIPO_CONTA_BANCARIA", nullable = false)
     private String tipoContaBancaria;
 
-    @Column(name = "NUMERO", unique = true, length = 10, nullable = false)
-    private String numero;
+    @Column(name = "NUMERO_CONTA_BANCARIA", unique = true, length = 10, nullable = false)
+    private String numeroContaBancaria;
 
-    @Column(name = "NUMERO_AGENCIA", unique = true, length = 10, nullable = false)
-    private String numero_agencia;
+    @Column(name = "NUMERO_AGENCIA_CONTA_BANCARIA", unique = true, length = 10, nullable = false)
+    private String numeroAgenciaContaBancaria;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "DATA_ABERTURA")
@@ -43,30 +44,13 @@ public class ContaBancariaDomain implements Serializable {
     @Column(name = "DATA_ENCERRAMENTO")
     private LocalDate dataEncerramento;
 
+    @Column(name = "SALDO_INICIAL")
+    private BigDecimal saldoInicial;
+
     @Column(name = "BOL_CONTA_BANCARIA_PRINCIPAL", nullable = false)
     private boolean bolContaBancariaPrincipal;
 
-    public ContaBancariaDomain() { }
-
-    public ContaBancariaDomain(PessoaDomain pessoaContaBancaria, PessoaDomain pessoaTitular, String tipoContaBancaria, String numero,
-                               String numero_agencia, LocalDate dataAbertura, LocalDate dataEncerramento, boolean bolContaBancariaPrincipal) {
-        this.pessoaContaBancaria = pessoaContaBancaria;
-        this.pessoaTitular = pessoaTitular;
-        this.tipoContaBancaria = tipoContaBancaria;
-        this.numero = numero;
-        this.numero_agencia = numero_agencia;
-        this.dataAbertura = dataAbertura;
-        this.dataEncerramento = dataEncerramento;
-        this.bolContaBancariaPrincipal = true;
-    }
-
-    public ContaBancariaDomain(PessoaDomain pessoaContaBancaria, PessoaDomain pessoaTitular, String tipoContaBancaria, String numero,
-                               String numero_agencia, boolean bolContaBancariaPrincipal) {
-        this.pessoaContaBancaria = pessoaContaBancaria;
-        this.pessoaTitular = pessoaTitular;
-        this.tipoContaBancaria = tipoContaBancaria;
-        this.numero = numero;
-        this.numero_agencia = numero_agencia;
+    public ContaBancariaDomain() {
         this.bolContaBancariaPrincipal = true;
     }
 
@@ -102,20 +86,20 @@ public class ContaBancariaDomain implements Serializable {
         this.tipoContaBancaria = tipoContaBancaria;
     }
 
-    public String getNumero() {
-        return numero;
+    public String getNumeroContaBancaria() {
+        return numeroContaBancaria;
     }
 
-    public void setNumero(String numero) {
-        this.numero = numero;
+    public void setNumeroContaBancaria(String numeroContaBancaria) {
+        this.numeroContaBancaria = numeroContaBancaria;
     }
 
-    public String getNumero_agencia() {
-        return numero_agencia;
+    public String getNumeroAgenciaContaBancaria() {
+        return numeroAgenciaContaBancaria;
     }
 
-    public void setNumero_agencia(String numero_agencia) {
-        this.numero_agencia = numero_agencia;
+    public void setNumeroAgenciaContaBancaria(String numeroAgenciaContaBancaria) {
+        this.numeroAgenciaContaBancaria = numeroAgenciaContaBancaria;
     }
 
     public LocalDate getDataAbertura() {
@@ -134,7 +118,15 @@ public class ContaBancariaDomain implements Serializable {
         this.dataEncerramento = dataEncerramento;
     }
 
-    public boolean getBolContaBancariaPrincipal() {
+    public BigDecimal getSaldoInicial() {
+        return saldoInicial;
+    }
+
+    public void setSaldoInicial(BigDecimal saldoInicial) {
+        this.saldoInicial = saldoInicial;
+    }
+
+    public boolean isBolContaBancariaPrincipal() {
         return bolContaBancariaPrincipal;
     }
 

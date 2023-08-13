@@ -12,6 +12,8 @@ public enum TipoContaBancariaEnumeration {
 
     private Integer codigo;
 
+    private String nome;
+
     private String descricao;
 
     private String sigla;
@@ -22,19 +24,17 @@ public enum TipoContaBancariaEnumeration {
         this.sigla = sigla;
     }
 
-    public static TipoContaBancariaEnumeration converter(TipoContaBancariaEnumeration tipoContaBancariaEnumeration) {
-        switch (tipoContaBancariaEnumeration.getCodigo()) {
-            case 1:
-                return TipoContaBancariaEnumeration.CONTA_ESPECIAL;
-            case 2:
-                return TipoContaBancariaEnumeration.CONTA_SALARIO;
-            case 3:
-                return TipoContaBancariaEnumeration.CONTA_CORRENTE;
-            case 4:
-                return TipoContaBancariaEnumeration.CONTA_POUPANCA;
-            default:
-                return TipoContaBancariaEnumeration.CONTA_INVESTIMENTO;
+    public static TipoContaBancariaEnumeration converter(Long codigo) {
+        if (codigo == 1) {
+            return TipoContaBancariaEnumeration.CONTA_ESPECIAL;
+        } else if (codigo == 2) {
+            return TipoContaBancariaEnumeration.CONTA_SALARIO;
+        } else if (codigo == 3) {
+            return TipoContaBancariaEnumeration.CONTA_CORRENTE;
+        } else if (codigo == 4) {
+            return TipoContaBancariaEnumeration.CONTA_POUPANCA;
         }
+        return TipoContaBancariaEnumeration.CONTA_INVESTIMENTO;
     }
 
     public Integer getCodigo() {
@@ -59,6 +59,14 @@ public enum TipoContaBancariaEnumeration {
 
     public void setSigla(String sigla) {
         this.sigla = sigla;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
 }
