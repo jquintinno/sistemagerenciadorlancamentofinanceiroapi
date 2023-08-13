@@ -77,8 +77,6 @@ public class ContaBancariaService {
         return new PessoaDomain(358L);
     }
 
-    // Verificar se uma determinada pessoa ja tem uma conta bancaria principal e ativa, caso verdadeiro,
-    // deve-se atribuir falso para conta antiga e atribuir true a nova conta
     private void verificarTitularContaBancariaPrincipal(ContaBancariaDomain contaBancariaDomain) {
         if (this.contaBancariaImplementacaoRepository.bolVerificarTitularContaBancariaPrincipal(contaBancariaDomain.getPessoaTitular().getCodigo())) {
             this.contaBancariaImplementacaoRepository.recuperarContaBancariaPessoaTitular(contaBancariaDomain.getCodigo(), contaBancariaDomain.getPessoaTitular().getCodigo()).forEach( result -> {
