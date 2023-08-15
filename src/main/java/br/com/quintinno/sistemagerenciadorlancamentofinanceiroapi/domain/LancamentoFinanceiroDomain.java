@@ -20,11 +20,11 @@ public class LancamentoFinanceiroDomain implements Serializable {
     private Long codigo;
 
     @ManyToOne
-    @JoinColumn(name = "ID_CATEGORIA_LANCAMENTO_FINANCEIRO")
+    @JoinColumn(name = "ID_CATEGORIA_LANCAMENTO_FINANCEIRO", nullable = false)
     private CategoriaLancamentoFinanceiroDomain categoriaLancamentoFinanceiroDomain;
 
     @ManyToOne
-    @JoinColumn(name = "ID_PESSOA_LANCAMENTO_FINANCEIRO")
+    @JoinColumn(name = "ID_PESSOA_LANCAMENTO_FINANCEIRO", nullable = false)
     private PessoaDomain pessoaLancamentoFinanceiro;
 
     @ManyToOne
