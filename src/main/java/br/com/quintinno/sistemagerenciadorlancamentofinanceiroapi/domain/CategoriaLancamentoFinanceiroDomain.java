@@ -20,6 +20,9 @@ public class CategoriaLancamentoFinanceiroDomain implements Serializable {
     @Column(name = "NOME", unique = true, nullable = false)
     private String nome;
 
+    @Column(name = "SIGLA", unique = true, nullable = false)
+    private String sigla;
+
     public CategoriaLancamentoFinanceiroDomain() { }
 
     public Long getCodigo() {
@@ -36,6 +39,14 @@ public class CategoriaLancamentoFinanceiroDomain implements Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getSigla() {
+        return sigla;
+    }
+
+    public void setSigla(String sigla) {
+        this.sigla = sigla;
     }
 
 }
