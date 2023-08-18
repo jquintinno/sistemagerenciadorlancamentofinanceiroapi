@@ -4,6 +4,7 @@ import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.configuration.
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.domain.ProdutoServicoDomain;
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto.PessoaRequestDTO;
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.dto.ProdutoServicoResponseDTO;
+import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.repository.ProdutoServicoRepository;
 import br.com.quintinno.sistemagerenciadorlancamentofinanceiroapi.service.PessoaService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,6 +27,9 @@ class ApplicationTests {
 
 	@Autowired
 	private PessoaService pessoaService;
+
+	@Autowired
+	private ProdutoServicoRepository produtoServicoRepository;
 
 	@Test
 	void converterProdutoServicoDomainParaProdutoServicoResponseDTO() {
@@ -60,6 +64,16 @@ class ApplicationTests {
 			this.pessoaService.createOne(pessoaRequestDTO);
 		}
 		Assertions.assertEquals(jsonNodeRoot != null, true);
+	}
+
+	@Test
+	public void deveGerar100LinhasProdutoServico() {
+		for (int i = 1 ; i <= 100 ; i++) {
+			ProdutoServicoDomain produtoServicoDomain = new ProdutoServicoDomain();
+				produtoServicoDomain.setNome("Produto ou Serviço " + i);
+				produtoServicoDomain.setDescricao("Descricao Produto ou Serviço " + i);
+					produtoServicoRepository.save(produtoServicoDomain);
+		}
 	}
 
 }

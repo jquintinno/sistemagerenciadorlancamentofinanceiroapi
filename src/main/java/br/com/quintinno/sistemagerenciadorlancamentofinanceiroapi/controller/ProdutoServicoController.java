@@ -26,4 +26,9 @@ public class ProdutoServicoController {
         return this.produtoServicoService.searchAll();
     }
 
+    @GetMapping("/filtro/{nomeProdutoServico}")
+    public List<ProdutoServicoResponseDTO> searchOne(@PathVariable("nomeProdutoServico") String nomeProdutoServico) {
+        return this.produtoServicoService.searchOne(nomeProdutoServico);
+    }
+
 }
