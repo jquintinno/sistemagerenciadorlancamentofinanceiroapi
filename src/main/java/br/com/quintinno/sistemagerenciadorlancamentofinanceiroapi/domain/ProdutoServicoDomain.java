@@ -24,7 +24,7 @@ public class ProdutoServicoDomain implements Serializable {
     @Column(name = "NOME", unique = true, nullable = false)
     private String nome;
 
-    @Column(name = "DESCRICAO", nullable = false)
+    @Column(name = "DESCRICAO")
     private String descricao;
 
     public ProdutoServicoDomain() {
